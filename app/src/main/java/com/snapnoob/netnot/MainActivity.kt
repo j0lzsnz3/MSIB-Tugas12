@@ -1,11 +1,13 @@
 package com.snapnoob.netnot
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.snapnoob.netnot.browse.BrowseAdapter
+import com.snapnoob.netnot.category.CategoryDetailActivity
 import com.snapnoob.netnot.databinding.ActivityMainBinding
 import com.snapnoob.netnot.mymovielist.MyMovieListAdapter
 
@@ -49,7 +51,9 @@ class MainActivity : AppCompatActivity() {
     private fun loadBrowseContent() {
         binding.rvHome.apply {
             layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-            val browseAdapter = BrowseAdapter()
+            val browseAdapter = BrowseAdapter {
+                openCategoryDetailActivity(it)
+            }
             adapter = browseAdapter
             browseAdapter.setData(ContentGenerator.createBrowseContentViews())
         }
@@ -62,5 +66,11 @@ class MainActivity : AppCompatActivity() {
             adapter = myMovieListAdapter
             myMovieListAdapter.setData(ContentGenerator.createMyMovieListViews())
         }
+    }
+
+    private fun openCategoryDetailActivity(isFromTrending: Boolean) {
+        val intent = Intent(this, CategoryDetailActivity::class.java)
+        intent.putExtra(CategoryDetailActivity.IS_FROM_TRENDING, isFromTrending)
+        startActivity(intent)
     }
 }

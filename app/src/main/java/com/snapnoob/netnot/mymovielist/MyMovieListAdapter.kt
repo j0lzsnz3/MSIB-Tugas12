@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.snapnoob.netnot.R
+import com.snapnoob.netnot.databinding.ViewMyListBinding
 
 class MyMovieListAdapter : RecyclerView.Adapter<MyMovieListAdapter.ViewHolder>() {
     private var myMovieList: List<MyMovieListView> = listOf()
@@ -19,8 +20,10 @@ class MyMovieListAdapter : RecyclerView.Adapter<MyMovieListAdapter.ViewHolder>()
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_my_list, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val viewBinding = ViewMyListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(viewBinding)
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(myMovieList[position])
@@ -28,21 +31,18 @@ class MyMovieListAdapter : RecyclerView.Adapter<MyMovieListAdapter.ViewHolder>()
 
     override fun getItemCount(): Int = myMovieList.size
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(
+        private val binding: ViewMyListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(myMovieListView: MyMovieListView) {
-            val imageMovie = itemView.findViewById<ImageView>(R.id.imgMovie)
-            val title = itemView.findViewById<TextView>(R.id.tvTitle)
-            val year = itemView.findViewById<TextView>(R.id.tvYear)
-            val season = itemView.findViewById<TextView>(R.id.tvSeason)
-
-            Glide.with(itemView)
+            Glide.with(binding.root)
                 .load(myMovieListView.imageUrl)
                 .centerCrop()
-                .into(imageMovie)
+                .into(binding.imgMovie)
 
-            title.text = myMovieListView.title
-            year.text = myMovieListView.year
-            season.text = myMovieListView.season
+            binding.tvTitle.text = myMovieListView.title
+            binding.tvYear.text = myMovieListView.year
+            binding.tvSeason.text = myMovieListView.season
         }
     }
 
