@@ -1,4 +1,4 @@
-package com.snapnoob.netnot.mymovielist
+package com.snapnoob.netnot.feature.favourite
 
 data class MyMovieListView (
     val title: String,

@@ -1,4 +1,4 @@
-package com.snapnoob.netnot.category
+package com.snapnoob.netnot.feature.categorydetail
 
 data class CategoryDetailView (
     val title: String,
