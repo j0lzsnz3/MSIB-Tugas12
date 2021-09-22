@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NETNOT">
         <activity
-            android:name="com.snapnoob.netnot.feature.categorydetail.CategoryDetailActivity"
+            android:name=".feature.moviedetail.MovieDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".feature.categorydetail.CategoryDetailActivity"
             android:exported="true" />
         <activity
             android:name=".feature.main.MainActivity"

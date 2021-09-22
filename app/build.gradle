@@ -76,6 +76,9 @@ dependencies {
     // SwipeRefreshLayout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    // CoordinatorLayout
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+
     // flipper
     debugImplementation 'com.facebook.flipper:flipper:0.98.0'
     debugImplementation 'com.facebook.soloader:soloader:0.10.1'

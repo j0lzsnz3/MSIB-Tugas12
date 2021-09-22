@@ -26,7 +26,7 @@ interface MoviesService {
 
     @GET("movie/{movie_id}")
     fun getMovieDetail(
-        @Path("movie_id") movieId: Long,
+        @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String? = null,
         @Query("append_to_response") appendToResponse: String? = null

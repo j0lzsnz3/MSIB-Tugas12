@@ -1,14 +1,15 @@
 package com.snapnoob.netnot.feature.categorydetail
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.snapnoob.netnot.ContentGenerator
 import com.snapnoob.netnot.R
 import com.snapnoob.netnot.databinding.ActivityCategoryDetailBinding
+import com.snapnoob.netnot.feature.moviedetail.MovieDetailActivity
 import com.snapnoob.netnot.network.model.Movies
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,7 +52,7 @@ class CategoryDetailActivity : AppCompatActivity() {
     private fun initView() {
         binding.rvItems.apply {
             layoutManager = LinearLayoutManager(this@CategoryDetailActivity, LinearLayoutManager.VERTICAL, false)
-            categoryDetailAdapter = CategoryDetailAdapter()
+            categoryDetailAdapter = CategoryDetailAdapter { openMovieDetailActivity(it) }
             adapter = categoryDetailAdapter
         }
     }
@@ -75,12 +76,19 @@ class CategoryDetailActivity : AppCompatActivity() {
             categoryDetailViews.add(
                 CategoryDetailView(
                     title = it.title,
+                    movieId = it.id,
                     imageUrl = it.posterPath,
                     year = it.releaseDate
                 )
             )
         }
         return categoryDetailViews
+    }
+
+    private fun openMovieDetailActivity(movieId: Int) {
+        val intent = Intent(this, MovieDetailActivity::class.java)
+        intent.putExtra(MovieDetailActivity.MOVIE_ID, movieId)
+        startActivity(intent)
     }
 
     companion object {
