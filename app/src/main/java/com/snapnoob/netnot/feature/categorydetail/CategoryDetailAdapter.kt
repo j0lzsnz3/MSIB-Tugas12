@@ -1,10 +1,11 @@
-package com.snapnoob.netnot.category
+package com.snapnoob.netnot.feature.categorydetail
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.snapnoob.netnot.AppConstant
 import com.snapnoob.netnot.databinding.ViewCategoryDetailBinding
 
 class CategoryDetailAdapter : RecyclerView.Adapter<CategoryDetailAdapter.ViewHolder>() {
@@ -32,8 +33,8 @@ class CategoryDetailAdapter : RecyclerView.Adapter<CategoryDetailAdapter.ViewHol
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(view: CategoryDetailView) {
             Glide.with(binding.root)
-                .load(view.imageUrl)
-                .centerCrop()
+                .load(AppConstant.IMAGE_URL_500.plus(view.imageUrl))
+                .fitCenter()
                 .into(binding.imgMovie)
 
             binding.tvMovieTitle.text = view.title

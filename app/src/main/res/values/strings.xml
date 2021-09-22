@@ -2,4 +2,6 @@
     <string name="app_name">NETNOT</string>
     <string name="search">Search</string>
     <string name="more">More</string>
+    <string name="popular_movies">Popular Movies</string>
+    <string name="top_rated">Top Rated</string>
 </resources>

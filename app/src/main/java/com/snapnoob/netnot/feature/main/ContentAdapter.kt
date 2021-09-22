@@ -1,12 +1,10 @@
-package com.snapnoob.netnot.browse
+package com.snapnoob.netnot.feature.main
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.snapnoob.netnot.R
+import com.snapnoob.netnot.AppConstant
 import com.snapnoob.netnot.databinding.ViewBrowseContentBinding
 
 class ContentAdapter(
@@ -29,7 +27,7 @@ class ContentAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind(imageUrl: String) {
             Glide.with(binding.root)
-                .load(imageUrl)
+                .load(AppConstant.IMAGE_URL_500.plus(imageUrl))
                 .centerCrop()
                 .into(binding.imgMovie)
         }

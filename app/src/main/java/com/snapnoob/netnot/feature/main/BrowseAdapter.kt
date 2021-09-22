@@ -1,23 +1,21 @@
-package com.snapnoob.netnot.browse
+package com.snapnoob.netnot.feature.main
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.snapnoob.netnot.R
 import com.snapnoob.netnot.databinding.ViewBrowseBinding
 
 class BrowseAdapter(
     private val setOnClickAllListener: (Boolean) -> Unit
 ) : RecyclerView.Adapter<BrowseAdapter.ViewHolder>() {
-    private var contentViews: List<ContentView> = listOf()
+    private var contentViews: MutableList<ContentView> = mutableListOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(contents: List<ContentView>) {
-        this.contentViews = contents
+    fun setData(content: ContentView) {
+        contentViews.add(content)
         notifyDataSetChanged()
     }
 
@@ -34,16 +32,16 @@ class BrowseAdapter(
 
     inner class ViewHolder(
         private val binding: ViewBrowseBinding,
-        private val isFromTrendingListener: (Boolean) -> Unit
+        private val isFromPopularViewListener: (Boolean) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind(contentView: ContentView) {
             val context = itemView.context
 
             binding.tvContentTitle.text = contentView.title
 
-            val isTrendingView = contentView.title.contains("Trending", false)
-            binding.imageView.setOnClickListener { isFromTrendingListener.invoke(isTrendingView) }
-            binding.textView2.setOnClickListener { isFromTrendingListener.invoke(isTrendingView) }
+            val isPopularView = contentView.contentCategory.name == ContentCategory.POPULAR.name
+            binding.imageView.setOnClickListener { isFromPopularViewListener.invoke(isPopularView) }
+            binding.textView2.setOnClickListener { isFromPopularViewListener.invoke(isPopularView) }
 
             if (contentView.subTitle != null) {
                 binding.tvContentSubtitle.text = contentView.subTitle
@@ -53,7 +51,7 @@ class BrowseAdapter(
 
             binding.rvContent.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = ContentAdapter(contentView.imageUrls)
+                adapter = ContentAdapter(contentView.posterPaths)
             }
         }
     }
