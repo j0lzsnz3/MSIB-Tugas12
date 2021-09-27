@@ -1,7 +1,7 @@
 package com.snapnoob.netnot.di
 
-import com.snapnoob.netnot.feature.detail.GetMovieDetailUseCase
-import com.snapnoob.netnot.feature.detail.GetMovieDetailUseCaseImpl
+import com.snapnoob.netnot.feature.moviedetail.GetMovieDetailUseCase
+import com.snapnoob.netnot.feature.moviedetail.GetMovieDetailUseCaseImpl
 import com.snapnoob.netnot.feature.favourite.GetAllFavouriteMovieUseCase
 import com.snapnoob.netnot.feature.favourite.GetAllFavouriteMovieUseCaseImpl
 import com.snapnoob.netnot.feature.main.GetPopularMoviesUseCase

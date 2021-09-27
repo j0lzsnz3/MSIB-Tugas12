@@ -1,4 +1,4 @@
-package com.snapnoob.netnot.feature.detail
+package com.snapnoob.netnot.feature.moviedetail
 
 import com.snapnoob.netnot.data.entity.FavouriteMovie
 import com.snapnoob.netnot.repository.FavouriteMovieRepository

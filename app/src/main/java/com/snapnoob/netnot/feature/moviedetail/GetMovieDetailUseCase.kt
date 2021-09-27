@@ -1,4 +1,4 @@
-package com.snapnoob.netnot.feature.detail
+package com.snapnoob.netnot.feature.moviedetail
 
 import com.snapnoob.netnot.network.ResultWrapper
 import com.snapnoob.netnot.network.model.MovieDetail
@@ -10,14 +10,14 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 interface GetMovieDetailUseCase {
-    fun getMovieDetail(movieId: Long): Flow<ResultWrapper<MovieDetail>>
+    fun getMovieDetail(movieId: Int): Flow<ResultWrapper<MovieDetail>>
 }
 
 class GetMovieDetailUseCaseImpl @Inject constructor(
     private val repository: MoviesServiceRepository,
     private val coroutineContext: CoroutineContext
 ): GetMovieDetailUseCase {
-    override fun getMovieDetail(movieId: Long): Flow<ResultWrapper<MovieDetail>> {
+    override fun getMovieDetail(movieId: Int): Flow<ResultWrapper<MovieDetail>> {
         return flow { emit(repository.getMovieDetail(movieId)) }
             .flowOn(coroutineContext)
     }

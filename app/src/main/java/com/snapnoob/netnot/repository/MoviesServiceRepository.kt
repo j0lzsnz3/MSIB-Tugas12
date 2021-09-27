@@ -9,7 +9,7 @@ import javax.inject.Inject
 interface MoviesServiceRepository {
     fun getPopularMovies(): ResultWrapper<Movies>
     fun getTopRatedMovies(): ResultWrapper<Movies>
-    fun getMovieDetail(movieId: Long): ResultWrapper<MovieDetail>
+    fun getMovieDetail(movieId: Int): ResultWrapper<MovieDetail>
 }
 
 class MovieServiceRepositoryImpl @Inject constructor(
@@ -59,7 +59,7 @@ class MovieServiceRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMovieDetail(movieId: Long): ResultWrapper<MovieDetail> {
+    override fun getMovieDetail(movieId: Int): ResultWrapper<MovieDetail> {
         return try {
             val response = retrofitService.getMoviesService()
                 .getMovieDetail(movieId, retrofitService.getApiKey())

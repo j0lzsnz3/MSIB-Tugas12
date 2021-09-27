@@ -13,6 +13,7 @@ import com.snapnoob.netnot.R
 import com.snapnoob.netnot.feature.categorydetail.CategoryDetailActivity
 import com.snapnoob.netnot.databinding.ActivityMainBinding
 import com.snapnoob.netnot.feature.favourite.MyMovieListAdapter
+import com.snapnoob.netnot.feature.moviedetail.MovieDetailActivity
 import com.snapnoob.netnot.network.model.Movies
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerViewBrowse() {
         binding.rvHome.apply {
             layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-            browseAdapter = BrowseAdapter { openCategoryDetailActivity(it) }
+            browseAdapter = BrowseAdapter(this@MainActivity::openCategoryDetailActivity, this@MainActivity::openMovieDetailActivity)
             adapter = browseAdapter
         }
 
@@ -92,11 +93,16 @@ class MainActivity : AppCompatActivity() {
         movies: Movies,
         category: ContentCategory
     ): ContentView {
-        val posterPaths = mutableListOf<String>()
+        val movieViews = mutableListOf<MovieView>()
         // set limited because it's just a overview
         if (movies.moviesResults.size >= 5) {
             movies.moviesResults.take(5).forEach {
-                posterPaths.add(it.posterPath)
+                movieViews.add(
+                    MovieView(
+                        movieId = it.id,
+                        posterPath = it.posterPath
+                    )
+                )
             }
         }
         val contentTitle = if (category.name == ContentCategory.POPULAR.name) {
@@ -108,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         return ContentView(
             title = contentTitle,
             contentCategory = category,
-            posterPaths = posterPaths
+            posterPaths = movieViews
         )
     }
 
@@ -130,6 +136,12 @@ class MainActivity : AppCompatActivity() {
     private fun openCategoryDetailActivity(isFromTrending: Boolean) {
         val intent = Intent(this, CategoryDetailActivity::class.java)
         intent.putExtra(CategoryDetailActivity.IS_FROM_POPULAR, isFromTrending)
+        startActivity(intent)
+    }
+
+    private fun openMovieDetailActivity(movieId: Int) {
+        val intent = Intent(this, MovieDetailActivity::class.java)
+        intent.putExtra(MovieDetailActivity.MOVIE_ID, movieId)
         startActivity(intent)
     }
 }

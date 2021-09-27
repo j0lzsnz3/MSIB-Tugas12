@@ -8,7 +8,9 @@ import com.bumptech.glide.Glide
 import com.snapnoob.netnot.AppConstant
 import com.snapnoob.netnot.databinding.ViewCategoryDetailBinding
 
-class CategoryDetailAdapter : RecyclerView.Adapter<CategoryDetailAdapter.ViewHolder>() {
+class CategoryDetailAdapter(
+    private val setOnClickListener: (Int) -> Unit
+) : RecyclerView.Adapter<CategoryDetailAdapter.ViewHolder>() {
     private var categoryDetailViews: List<CategoryDetailView> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -19,7 +21,7 @@ class CategoryDetailAdapter : RecyclerView.Adapter<CategoryDetailAdapter.ViewHol
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val viewBinding = ViewCategoryDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(viewBinding)
+        return ViewHolder(viewBinding, setOnClickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -29,9 +31,13 @@ class CategoryDetailAdapter : RecyclerView.Adapter<CategoryDetailAdapter.ViewHol
     override fun getItemCount(): Int = categoryDetailViews.size
 
     inner class ViewHolder(
-        private val binding: ViewCategoryDetailBinding
+        private val binding: ViewCategoryDetailBinding,
+        private val setOnClickListener: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(view: CategoryDetailView) {
+
+            binding.imgMovie.setOnClickListener { setOnClickListener.invoke(view.movieId) }
+
             Glide.with(binding.root)
                 .load(AppConstant.IMAGE_URL_500.plus(view.imageUrl))
                 .fitCenter()
