@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.snapnoob.netnot.R
@@ -12,6 +11,7 @@ import com.snapnoob.netnot.databinding.ActivityCategoryDetailBinding
 import com.snapnoob.netnot.feature.moviedetail.MovieDetailActivity
 import com.snapnoob.netnot.network.model.Movies
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryDetailActivity : AppCompatActivity() {
@@ -19,9 +19,10 @@ class CategoryDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCategoryDetailBinding
     private lateinit var view: View
 
-    private lateinit var viewModel: CategoryDetailViewModel
-
     private lateinit var categoryDetailAdapter: CategoryDetailAdapter
+
+    @Inject
+    lateinit var presenter: CategoryDetailPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +30,14 @@ class CategoryDetailActivity : AppCompatActivity() {
         view = binding.root
         setContentView(view)
 
-        viewModel = ViewModelProvider(this)[CategoryDetailViewModel::class.java]
-
         initView()
-        observeViewModel()
 
         if (intent.hasExtra(IS_FROM_POPULAR)) {
             val isFromPopular = intent.getBooleanExtra(IS_FROM_POPULAR, false)
             if (isFromPopular) {
-                viewModel.getPopularMovies()
+                presenter.getPopularMovies(this::handlePresenterEvent)
             } else {
-                viewModel.getTopRatedMovies()
+                presenter.getTopRatedMovies(this::handlePresenterEvent)
             }
 
             binding.toolBar.title = if (isFromPopular) getString(R.string.popular_movies) else getString(R.string.top_rated)
@@ -51,23 +49,28 @@ class CategoryDetailActivity : AppCompatActivity() {
 
     private fun initView() {
         binding.rvItems.apply {
-            layoutManager = LinearLayoutManager(this@CategoryDetailActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(
+                this@CategoryDetailActivity,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
             categoryDetailAdapter = CategoryDetailAdapter { openMovieDetailActivity(it) }
             adapter = categoryDetailAdapter
         }
     }
 
-    private fun observeViewModel() {
-        viewModel.categoryDetailEventLiveData.observe(this, { event ->
-            when (event) {
-                is CategoryDetailEvent.ShowError -> Snackbar.make(view, event.error, Snackbar.LENGTH_LONG).show()
+    private fun handlePresenterEvent(event: CategoryDetailPresenterEvent) {
+        when (event) {
+            is CategoryDetailPresenterEvent.ShowMovies -> displayMovies(event.movies)
+            is CategoryDetailPresenterEvent.ShowError  -> {
+                Snackbar.make(view, event.error, Snackbar.LENGTH_LONG).show()
             }
-        })
+        }
+    }
 
-        viewModel.moviesLiveData.observe(this, { movies ->
-            val categoryDetailViews = createCategoryDetailViews(movies)
-            categoryDetailAdapter.setData(categoryDetailViews)
-        })
+    private fun displayMovies(movies: Movies) {
+        val categoryDetailViews = createCategoryDetailViews(movies)
+        categoryDetailAdapter.setData(categoryDetailViews)
     }
 
     private fun createCategoryDetailViews(movies: Movies): List<CategoryDetailView> {
